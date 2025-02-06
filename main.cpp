@@ -13,7 +13,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 // Dichiarazione della funzione CUDA
-void runCUDA();
+void histogram_equalization_cuda(const Mat& input, Mat& output);
 
 // Funzione per l'equalizzazione dell'istogramma
 void histogram_equalization_seq(const Mat& input, Mat& output) {
@@ -112,29 +112,42 @@ int main() {
         return -1;
     }
 
-    // Output
-    Mat output;
-    // histogram_equalization(input, output);
+    // Converti l'immagine in scala di grigi
+    Mat input_gray;
+    cvtColor(input, input_gray, COLOR_BGR2GRAY);
 
-    // *** MISURAZIONE TEMPO DI ESECUZIONE ***
-    auto start = chrono::high_resolution_clock::now(); // Tempo iniziale
-    histogram_equalization_seq(input, output);
-    auto end = chrono::high_resolution_clock::now(); // Tempo finale
-    chrono::duration<double, milli> elapsed_seq = end - start; // Calcola differenza in millisecondi
+    // Output
+    Mat output_seq;
+
+    // Inizializza output_cuda con le stesse dimensioni e tipo di input_gray
+    Mat output_cuda = Mat::zeros(input_gray.size(), input_gray.type());
+
+    // *** MISURAZIONE TEMPO DI ESECUZIONE SEQUENZIALE ***
+    auto start_seq = chrono::high_resolution_clock::now(); // Tempo iniziale
+    histogram_equalization_seq(input_gray, output_seq);
+    auto end_seq = chrono::high_resolution_clock::now(); // Tempo finale
+    chrono::duration<double, milli> elapsed_seq = end_seq - start_seq;  // Calcola differenza in millisecondi
 
     cout << "Tempo di esecuzione dell'algoritmo sequenziale: " << elapsed_seq.count() << " ms" << endl;
 
-    // Mostra i risultati
-    //imshow("Originale", input);
-    //imshow("Equalizzata", output);
-    //waitKey(0);
+    // *** MISURAZIONE TEMPO DI ESECUZIONE CUDA ***
+    auto start_cuda = chrono::high_resolution_clock::now(); // Tempo iniziale
+    histogram_equalization_cuda(input_gray, output_cuda);
+    auto end_cuda = chrono::high_resolution_clock::now(); // Tempo finale
+    chrono::duration<double, milli> elapsed_cuda = end_cuda - start_cuda; // Calcola differenza in millisecondi
 
-    // Costruisci il percorso completo per il salvataggio dell'immagine
-    string output_path = result_dir + "/equalized_seq_" + fs::path(selected_image).filename().string();
+    cout << "Tempo di esecuzione dell'algoritmo CUDA: " << elapsed_cuda.count() << " ms" << endl;
+
+    // Salva i risultati - Costruisci il percorso completo per il salvataggio dell'immagine
+    string output_path_seq = result_dir + "/equalized_seq_" + fs::path(selected_image).filename().string();
+    string output_path_cuda = result_dir + "/equalized_cuda_" + fs::path(selected_image).filename().string();
 
     // Salva il risultato nella cartella img_results
-    imwrite(output_path, output);
-    cout << "Immagine salvata come: " << output_path << endl;
+    imwrite(output_path_seq, output_seq);
+    imwrite(output_path_cuda, output_cuda);
+
+    cout << "Immagine sequenziale salvata come: " << output_path_seq << endl;
+    cout << "Immagine CUDA salvata come: " << output_path_cuda << endl;
 
     return 0;
 }
