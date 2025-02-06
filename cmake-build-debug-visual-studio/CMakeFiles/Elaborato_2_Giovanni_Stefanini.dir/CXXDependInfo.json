@@ -1,0 +1,21 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "MSVC",
+	"compiler-id" : "MSVC",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"dir-cur-bld" : "C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio",
+	"dir-cur-src" : "C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini",
+	"dir-top-bld" : "C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio",
+	"dir-top-src" : "C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"C:\\opencv\\build\\include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir"
+}

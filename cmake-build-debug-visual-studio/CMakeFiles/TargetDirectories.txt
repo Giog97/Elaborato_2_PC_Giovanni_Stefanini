@@ -1,0 +1,3 @@
+C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir
+C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/edit_cache.dir
+C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/rebuild_cache.dir
