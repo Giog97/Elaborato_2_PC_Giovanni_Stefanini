@@ -17,7 +17,7 @@
 ✅ **C++**  
 ✅ **OpenCV** (per l'elaborazione delle immagini).  
 ✅ **CUDA** (per la parallelizzazione).  
-✅ **MSVC** (per compilare).  
+✅ **MSVC** + **nvcc** (per compilare).  
 ✅ **CMake** (per build multi-piattaforma).
 
 ---
