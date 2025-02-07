@@ -58,25 +58,14 @@ build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\kernel.cu.obj: CUDA_COMPILER
   TARGET_COMPILE_PDB = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\
   TARGET_PDB = Elaborato_2_Giovanni_Stefanini.pdb
 
-build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.ddi: CXX_SCAN__Elaborato_2_Giovanni_Stefanini_Debug C$:\Users\giost\CLionProjects\Elaborato_2_Giovanni_Stefanini\main.cpp || cmake_object_order_depends_target_Elaborato_2_Giovanni_Stefanini
-  DEP_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.ddi
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++20 -MDd -Zi
-  INCLUDES = -external:IC:\opencv\build\include -external:W0
-  OBJ_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.ddi.i
-
-build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj: CXX_COMPILER__Elaborato_2_Giovanni_Stefanini_scanned_Debug C$:\Users\giost\CLionProjects\Elaborato_2_Giovanni_Stefanini\main.cpp | CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.modmap || cmake_object_order_depends_target_Elaborato_2_Giovanni_Stefanini CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\CXX.dd
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.modmap
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++20 -MDd -Zi
-  INCLUDES = -external:IC:\opencv\build\include -external:W0
+build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cu.obj: CUDA_COMPILER__Elaborato_2_Giovanni_Stefanini_unscanned_Debug C$:\Users\giost\CLionProjects\Elaborato_2_Giovanni_Stefanini\main.cu || cmake_object_order_depends_target_Elaborato_2_Giovanni_Stefanini
+  DEP_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler=" -Ob0 -Od /RTC1" -std=c++20 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-MDd -Xcompiler=-Zi
+  INCLUDES = -isystem C:\opencv\build\include
   OBJECT_DIR = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir
   OBJECT_FILE_DIR = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir
   TARGET_COMPILE_PDB = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\
   TARGET_PDB = Elaborato_2_Giovanni_Stefanini.pdb
-  dyndep = CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXX.dd
-
-build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\CXX.dd | C$:\Users\giost\CLionProjects\Elaborato_2_Giovanni_Stefanini\cmake-build-debug-visual-studio\CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\CXXModules.json CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.modmap: CXX_DYNDEP__Elaborato_2_Giovanni_Stefanini_Debug CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj.ddi | C$:\Users\giost\CLionProjects\Elaborato_2_Giovanni_Stefanini\cmake-build-debug-visual-studio\CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\CXXDependInfo.json
 
 
 # =============================================================================
@@ -86,10 +75,9 @@ build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\CXX.dd | C$:\Users\giost\CLi
 #############################################
 # Link the executable CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj
 
-build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj: CXX_EXECUTABLE_DEVICE_LINKER__Elaborato_2_Giovanni_Stefanini_Debug CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\kernel.cu.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj | C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib
+build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj: CUDA_EXECUTABLE_DEVICE_LINKER__Elaborato_2_Giovanni_Stefanini_Debug CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\kernel.cu.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cu.obj | C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib
   LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler=" -Ob0 -Od /RTC1" "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-MDd -Xcompiler=-Zi
   LINK_LIBRARIES = cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.8\lib\x64
   OBJECT_DIR = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir
   TARGET_COMPILE_PDB = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\
   TARGET_FILE = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj
@@ -103,11 +91,10 @@ build CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj: CXX_E
 #############################################
 # Link the executable Elaborato_2_Giovanni_Stefanini.exe
 
-build Elaborato_2_Giovanni_Stefanini.exe: CXX_EXECUTABLE_LINKER__Elaborato_2_Giovanni_Stefanini_Debug CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\kernel.cu.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cpp.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj | C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+build Elaborato_2_Giovanni_Stefanini.exe: CUDA_EXECUTABLE_LINKER__Elaborato_2_Giovanni_Stefanini_Debug CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\kernel.cu.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\main.cu.obj CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir\cmake_device_link.obj | C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib C$:\opencv\build\x64\vc16\lib\opencv_world4100d.lib
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler=" -Ob0 -Od /RTC1" "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-MDd -Xcompiler=-Zi
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
   LINK_LIBRARIES = C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  C:\opencv\build\x64\vc16\lib\opencv_world4100d.lib  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.8\lib\x64
   OBJECT_DIR = CMakeFiles\Elaborato_2_Giovanni_Stefanini.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

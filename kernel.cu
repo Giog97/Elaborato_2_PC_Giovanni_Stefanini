@@ -2,17 +2,16 @@
 // Created by giost on 05/02/2025.
 //
 
-#include <opencv2/opencv.hpp>
+#include "kernel.h"
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 
 using namespace cv;
 
-// Kernel per calcolare l'istogramma utilizzando la memoria condivisa
+// Kernel 1 per calcolare l'istogramma con memoria condivisa
 __global__ void computeHistogram(const uchar* input, int* hist, int width, int height) {
-    // Ogni blocco calcola un istogramma locale nella memoria condivisa
     __shared__ int local_hist[256];
-    const int tid = threadIdx.x + threadIdx.y * blockDim.x;
+    int tid = threadIdx.x + threadIdx.y * blockDim.x;
 
     // Inizializza l'istogramma locale
     if (tid < 256) {
@@ -37,7 +36,7 @@ __global__ void computeHistogram(const uchar* input, int* hist, int width, int h
     }
 }
 
-// Kernel per calcolare la CDF
+// Kernel 2 per calcolare la CDF
 __global__ void computeCDF(int* hist, int* cdf) {
     int idx = threadIdx.x;
     int temp = 0;
@@ -47,7 +46,7 @@ __global__ void computeCDF(int* hist, int* cdf) {
     cdf[idx] = temp;
 }
 
-// Kernel per applicare la trasformazione utilizzando la lookup table
+// Kernel 3 per applicare la trasformazione
 __global__ void applyTransformation(uchar* output, const uchar* input, const uchar* lookup_table, int width, int height) {
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -58,7 +57,6 @@ __global__ void applyTransformation(uchar* output, const uchar* input, const uch
     }
 }
 
-// Funzione principale per l'equalizzazione dell'istogramma con CUDA
 void histogram_equalization_cuda(const Mat& input, Mat& output) {
     int width = input.cols;
     int height = input.rows;
@@ -83,24 +81,35 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     // Inizializza l'istogramma a zero
     cudaMemset(d_hist, 0, 256 * sizeof(int));
 
+    // Definizione eventi CUDA per il timing
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
     // Parametri per i kernel
-    dim3 blockSize(32, 8); // 256 thread per blocco (32x8)
+    dim3 blockSize(32, 16);
     dim3 gridSize(
         (width + blockSize.x - 1) / blockSize.x,
         (height + blockSize.y - 1) / blockSize.y
     );
 
-    // Calcola l'istogramma
-    computeHistogram<<<gridSize, blockSize>>>(d_input, d_hist, width, height);
+    // Inizia la misurazione del tempo solo per i kernel
+    cudaEventRecord(start);
 
-    // Calcola la CDF
+    // Kernel 1: Calcolo dell'istogramma
+    computeHistogram<<<gridSize, blockSize>>>(d_input, d_hist, width, height);
+    cudaDeviceSynchronize(); // Sincronizza prima di passare alla CDF
+
+    // Kernel 2: Calcolo della CDF
     computeCDF<<<1, 256>>>(d_hist, d_cdf);
+    cudaDeviceSynchronize(); // Sincronizza prima di passare alla applyTransformation
+
 
     // Copia la CDF dalla GPU alla CPU
     int h_cdf[256];
     cudaMemcpy(h_cdf, d_cdf, 256 * sizeof(int), cudaMemcpyDeviceToHost);
 
-    // Calcola min_cdf dalla CDF copiata
+    // Calcolo della lookup table sulla CPU
     int min_cdf = h_cdf[0];
     for (int i = 1; i < 256; i++) {
         if (h_cdf[i] < min_cdf) {
@@ -108,32 +117,42 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
         }
     }
 
-    // Calcola la lookup table
     uchar h_lookup_table[256];
-    if (total_pixels == min_cdf) {
-        // Evita divisione per zero (caso teorico)
-        memset(h_lookup_table, 0, 256 * sizeof(uchar));
-    } else {
-        for (int i = 0; i < 256; i++) {
-            float value = ((h_cdf[i] - min_cdf) * 255.0f) / (total_pixels - min_cdf);
-            h_lookup_table[i] = static_cast<uchar>(std::min(std::max(value, 0.0f), 255.0f));
-        }
+    for (int i = 0; i < 256; i++) {
+        float value = ((h_cdf[i] - min_cdf) * 255.0f) / (total_pixels - min_cdf);
+        h_lookup_table[i] = static_cast<uchar>(std::min(std::max(value, 0.0f), 255.0f));
     }
 
     // Copia la lookup table sulla GPU
     cudaMemcpy(d_lookup_table, h_lookup_table, 256 * sizeof(uchar), cudaMemcpyHostToDevice);
 
-    // Applica la trasformazione
+    // Kernel 3: Applicazione della trasformazione
     applyTransformation<<<gridSize, blockSize>>>(d_output, d_input, d_lookup_table, width, height);
+    cudaDeviceSynchronize();
+
+    // Registra il tempo di fine
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+
+    // Calcola il tempo impiegato dai kernel
+    float kernel_time;
+    cudaEventElapsedTime(&kernel_time, start, stop); // Serve calcolare tempo totale esecuzione dei 3 kernel senza considerare copie di memoria (cudaMemcpy)
+    std::cout << "Tempo di esecuzione solo dei kernel CUDA: " << kernel_time << " ms" << std::endl;
 
     // Copia il risultato sulla CPU
     cudaMemcpy(output.data, d_output, total_pixels * sizeof(uchar), cudaMemcpyDeviceToHost);
 
-    // Libera la memoria della GPU
+    // Libera memoria GPU
     cudaFree(d_input);
     cudaFree(d_output);
     cudaFree(d_hist);
     cudaFree(d_cdf);
     cudaFree(d_lookup_table);
+
+    // Distrugge gli eventi CUDA
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 }
+
+
 

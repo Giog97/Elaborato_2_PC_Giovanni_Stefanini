@@ -13,7 +13,8 @@ set(OpenCV_DIR "C:/opencv/build/x64/vc16/lib")
 find_package(OpenCV REQUIRED)
 
 # Aggiunge il codice CUDA al progetto
-add_executable(Elaborato_2_Giovanni_Stefanini kernel.cu main.cpp)
+add_executable(Elaborato_2_Giovanni_Stefanini kernel.cu main.cu
+        kernel.h)
 
 # Imposta il compilatore C++ e CUDA per usare C++17
 set_target_properties(Elaborato_2_Giovanni_Stefanini PROPERTIES
