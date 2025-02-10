@@ -54,6 +54,29 @@ void histogram_equalization_seq(const Mat& input, Mat& output) {
     }
 }
 
+// Funzione per ritrasformare un'immagine equalizzata in scala di grigi in RGB
+Mat restoreColorImage(const Mat& original, const Mat& equalized_gray) {
+    // Converti l'immagine originale in YCrCb
+    Mat ycrcb;
+    cvtColor(original, ycrcb, COLOR_BGR2YCrCb);
+
+    // Separa i canali Y, Cr, Cb
+    vector<Mat> channels;
+    split(ycrcb, channels);
+
+    // Sostituisci il canale Y (luminanza) con l'immagine equalizzata
+    channels[0] = equalized_gray;
+
+    // Unisci i canali Y, Cr, Cb di nuovo in un'immagine YCrCb
+    merge(channels, ycrcb);
+
+    // Converti di nuovo in BGR (RGB in OpenCV)
+    Mat result;
+    cvtColor(ycrcb, result, COLOR_YCrCb2BGR);
+
+    return result;
+}
+
 int main() {
     string img_dir = "img";  // Nome della cartella con le immagini
     string result_dir = "img_results";  // Nome della cartella per i risultati
@@ -136,17 +159,47 @@ int main() {
 
     cout << "Tempo di esecuzione CUDA (kernel + overhead di comunicazione tra CPU e GPU): " << elapsed_cuda.count() << " ms" << endl;
 
-    // Salva i risultati - Costruisci il percorso completo per il salvataggio dell'immagine
-    string output_path_seq = result_dir + "/equalized_seq_" + fs::path(selected_image).filename().string();
-    string output_path_cuda = result_dir + "/equalized_cuda_" + fs::path(selected_image).filename().string();
+    // Dopo l'equalizzazione (sequenziale o CUDA), ripristina le immagini a colori
+    Mat output_seq_color = restoreColorImage(input, output_seq);
+    Mat output_cuda_color = restoreColorImage(input, output_cuda);
 
-    // Salva il risultato nella cartella img_results
+    // Definizione delle sottocartelle
+    string gray_dir = result_dir + "/gray";
+    string color_dir = result_dir + "/color";
+
+    // Crea le sottocartelle se non esistono
+    if (!fs::exists(gray_dir)) {
+        fs::create_directory(gray_dir);
+    }
+    if (!fs::exists(color_dir)) {
+        fs::create_directory(color_dir);
+    }
+
+    // Salvataggio delle immagini in scala di grigi
+    string output_path_seq = gray_dir + "/equalized_seq_" + fs::path(selected_image).filename().string();
+    string output_path_cuda = gray_dir + "/equalized_cuda_" + fs::path(selected_image).filename().string();
     imwrite(output_path_seq, output_seq);
     imwrite(output_path_cuda, output_cuda);
 
     cout << "Immagine sequenziale salvata come: " << output_path_seq << endl;
     cout << "Immagine CUDA salvata come: " << output_path_cuda << endl;
 
+    // Salvataggio delle immagini a colori
+    string output_path_seq_color = color_dir + "/equalized_seq_color_" + fs::path(selected_image).filename().string();
+    string output_path_cuda_color = color_dir + "/equalized_cuda_color_" + fs::path(selected_image).filename().string();
+    imwrite(output_path_seq_color, output_seq_color);
+    imwrite(output_path_cuda_color, output_cuda_color);
+
+    cout << "Immagine sequenziale a colori salvata come: " << output_path_seq_color << endl;
+    cout << "Immagine CUDA a colori salvata come: " << output_path_cuda_color << endl;
+
+    // Si ottiene sia immagini in grigio che immagini a colori equalizzate.
+    // Così da quelle in grigio posso ottenere gli istogrammi da python per il report.
+    // Mentre da quelle a colori posso vedere il vero effetto della equalizzazione.
+
     return 0;
 }
+
+
+
 

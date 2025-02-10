@@ -34,8 +34,8 @@
 
 ## 🗂️ **Immagini Risultanti:**
 Le immagini saranno salvate in:
-- **`./img_results/equalized_seq_nameimage.jpg`**
-- **`./img_results/equalized_par_nameimage.jpg`**
+- **`.\img_results\color`**
+- **`.\img_results\gray`**
 
 ---
 
@@ -47,14 +47,14 @@ Le immagini saranno salvate in:
 ### 👀 **Demo Visiva**
 Miglioramento del contrasto tramite Equalizzazione dell'istogramma per le immagini di esempio:
 
-| **Input Originale**                                                                | **Eq. Sequenziale**                                                                                      | **Eq. Parallela**                                                                                          |  
-|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|  
-| <img src="./cmake-build-debug-visual-studio/img/1_low_contrast.png" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_1_low_contrast.png" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_1_low_contrast.png" width="150"/>   |  
-| <img src="./cmake-build-debug-visual-studio/img/2_dark_indoor.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_2_dark_indoor.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_2_dark_indoor.jpg" width="150"/>    |  
-| <img src="./cmake-build-debug-visual-studio/img/3_foggy.jpg" width="150"/>         | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_3_foggy.jpg" width="150"/>         | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_3_foggy.jpg" width="150"/>          |
-| <img src="./cmake-build-debug-visual-studio/img/4_overexposed.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_4_overexposed.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_4_overexposed.jpg" width="150"/>    |  
-| <img src="./cmake-build-debug-visual-studio/img/5_underexposed.jpg" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_5_underexposed.jpg" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_5_underexposed.jpg" width="150"/>   |  
-| <img src="./cmake-build-debug-visual-studio/img/6_overexposed2.JPG" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_6_overexposed2.JPG" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_6_overexposed2.JPG" width="150"/>   |
-| <img src="./cmake-build-debug-visual-studio/img/7_underexposed2.JPG" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_7_underexposed2.JPG" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_7_underexposed2.JPG" width="150"/>  |
-| <img src="./cmake-build-debug-visual-studio/img/8_highresolution.jpg" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/equalized_seq_8_highresolution.jpg" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/equalized_cuda_8_highresolution.jpg" width="150"/> |
+| **Input Originale**                                                                | **Eq. Sequenziale**                                                                                           | **Eq. Parallela**                                                                                              |  
+|------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|  
+| <img src="./cmake-build-debug-visual-studio/img/1_low_contrast.png" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_1_low_contrast.png" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_1_low_contrast.png" width="150"/> |  
+| <img src="./cmake-build-debug-visual-studio/img/2_dark_indoor.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_2_dark_indoor.jpg" width="150"/>        | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_2_dark_indoor.jpg" width="150"/>        |  
+| <img src="./cmake-build-debug-visual-studio/img/3_foggy.jpg" width="150"/>         | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_3_foggy.jpg" width="150"/>              | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_3_foggy.jpg" width="150"/>              |
+| <img src="./cmake-build-debug-visual-studio/img/4_overexposed.jpg" width="150"/>   | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_4_overexposed.jpg" width="150"/>        | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_4_overexposed.jpg" width="150"/>        |  
+| <img src="./cmake-build-debug-visual-studio/img/5_underexposed.jpg" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_5_underexposed.jpg" width="150"/>       | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_5_underexposed.jpg" width="150"/>       |  
+| <img src="./cmake-build-debug-visual-studio/img/6_overexposed2.JPG" width="150"/>  | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_6_overexposed2.JPG" width="150"/>       | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_6_overexposed2.JPG" width="150"/>       |
+| <img src="./cmake-build-debug-visual-studio/img/7_underexposed2.JPG" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_7_underexposed2.JPG" width="150"/>      | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_7_underexposed2.JPG" width="150"/>      |
+| <img src="./cmake-build-debug-visual-studio/img/8_highresolution.jpg" width="150"/> | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_seq_8_highresolution.jpg" width="150"/>     | <img src="./cmake-build-debug-visual-studio/img_results/color/equalized_cuda_8_highresolution.jpg" width="150"/>     |
 
