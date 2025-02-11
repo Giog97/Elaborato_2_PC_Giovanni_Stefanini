@@ -1,5 +1,5 @@
 //
-// Created by giost on 10/02/2025.
+// Created by giost on 05/02/2025.
 //
 
 #include "histogram_equalization_seq.h"

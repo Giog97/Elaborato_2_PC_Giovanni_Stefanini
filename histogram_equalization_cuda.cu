@@ -166,7 +166,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     // Aspetta che la CDF sia copiata sulla CPU prima di procedere con la lookup table
     cudaDeviceSynchronize(); // Questa sincronizzazione è necessaria per evitare che la lookup table venga calcolata prima che h_cdf sia pronto
 
-    // Calcolo della lookup table sulla CPU
+    // Calcolo della lookup table sulla CPU (Normalizzazione della CDF per ottenere i nuovi valori dei pixel?)
     int min_cdf = h_cdf[0];
     for (int i = 1; i < 256; i++) {
         if (h_cdf[i] < min_cdf) {
