@@ -1,10 +1,10 @@
 # ninja log v6
 20	15028	7609745122064465	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/main.cu.obj	683e3fc2b8c554a7
-12747	13226	7609749645364730	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
+13612	14089	7609751933190415	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
 21	122	7609053197170179	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXX.dd	2297b1c4e4a4e4e1
-8	449	7609053195650175	build.ninja	df5694677c12c52e
-13227	13602	7609749650155615	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
-20	12746	7609749518087269	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_cuda.cu.obj	9629d2a49b97f42a
+8	449	7609756439472166	build.ninja	df5694677c12c52e
+14089	14493	7609751937960439	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
+21	13611	7609751797281059	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_cuda.cu.obj	9629d2a49b97f42a
 546	5151	7606422782681334	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/main.cpp.obj	7d071073e58d9e9a
 16	28500	7608908425562993	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/kernel.cu.obj	99c310d8244b3d9
 24	479	7606422777451291	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/main.cpp.obj.ddi	791c5007f59cae05
@@ -13,9 +13,6 @@
 20	425	7609051501096255	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj.ddi	31c554184447eb5
 21	122	7609053197170179	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj.modmap	2297b1c4e4a4e4e1
 492	4054	7609051505820927	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj	e379f26f2851f06
-29	12890	7609750066810219	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_cuda.cu.obj	9629d2a49b97f42a
-12891	13364	7609750195435110	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
-13364	13737	7609750200155272	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
-21	13611	7609751797281059	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_cuda.cu.obj	9629d2a49b97f42a
-13612	14089	7609751933190415	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
-14089	14493	7609751937960439	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
+29	119	7609756832135271	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXX.dd	2297b1c4e4a4e4e1
+29	119	7609756832135271	C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXXModules.json	2297b1c4e4a4e4e1
+29	119	7609756832135271	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj.modmap	2297b1c4e4a4e4e1
