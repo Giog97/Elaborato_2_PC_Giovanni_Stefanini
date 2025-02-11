@@ -97,6 +97,18 @@ int main() {
     Mat input_gray;
     cvtColor(input, input_gray, COLOR_BGR2GRAY);
 
+    // Informazioni utili per il calcolo dell'Occupancy
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0);
+    printf("GPU: %s\n", prop.name);
+    printf("Compute Capability: %d.%d\n", prop.major, prop.minor);
+    printf("SMs: %d\n", prop.multiProcessorCount);
+    // printf("Warp size: %d\n", prop.warpSize); // è sempre 32 il max dim del warp
+    // printf("Max threads per block: %d\n", prop.maxThreadsPerBlock); // La max dimensione per i blocci è sempre 1024
+    printf("Registers per block: %d\n", prop.regsPerBlock);
+    printf("Shared memory per block: %lu bytes\n", prop.sharedMemPerBlock);
+    printf("Threads per SM: %d\n", prop.maxThreadsPerMultiProcessor);
+
     // Output
     Mat output_seq;
 
@@ -109,7 +121,7 @@ int main() {
     auto end_seq = chrono::high_resolution_clock::now(); // Tempo finale
     chrono::duration<double, milli> elapsed_seq = end_seq - start_seq;  // Calcola differenza in millisecondi
 
-    cout << "Tempo di esecuzione dell'algoritmo sequenziale: " << elapsed_seq.count() << " ms" << endl;
+    cout << "--> Tempo di esecuzione dell'algoritmo sequenziale: " << elapsed_seq.count() << " ms" << endl;
 
     // *** MISURAZIONE TEMPO DI ESECUZIONE CUDA ***
     auto start_cuda = chrono::high_resolution_clock::now(); // Tempo iniziale
@@ -117,7 +129,7 @@ int main() {
     auto end_cuda = chrono::high_resolution_clock::now(); // Tempo finale
     chrono::duration<double, milli> elapsed_cuda = end_cuda - start_cuda; // Calcola differenza in millisecondi
 
-    cout << "Tempo di esecuzione CUDA (kernel + overhead di comunicazione tra CPU e GPU): " << elapsed_cuda.count() << " ms" << endl;
+    cout << "--> Tempo di esecuzione CUDA (kernel + overhead di comunicazione tra CPU e GPU): " << elapsed_cuda.count() << " ms" << endl;
 
     // Dopo l'equalizzazione (sequenziale o CUDA), ripristina le immagini a colori
     Mat output_seq_color = restoreColorImage(input, output_seq);
@@ -141,8 +153,8 @@ int main() {
     imwrite(output_path_seq, output_seq);
     imwrite(output_path_cuda, output_cuda);
 
-    cout << "Immagine sequenziale salvata come: " << output_path_seq << endl;
-    cout << "Immagine CUDA salvata come: " << output_path_cuda << endl;
+    //cout << "Immagine sequenziale salvata come: " << output_path_seq << endl;
+    //cout << "Immagine CUDA salvata come: " << output_path_cuda << endl;
 
     // Salvataggio delle immagini a colori
     string output_path_seq_color = color_dir + "/equalized_seq_color_" + fs::path(selected_image).filename().string();
@@ -150,8 +162,8 @@ int main() {
     imwrite(output_path_seq_color, output_seq_color);
     imwrite(output_path_cuda_color, output_cuda_color);
 
-    cout << "Immagine sequenziale a colori salvata come: " << output_path_seq_color << endl;
-    cout << "Immagine CUDA a colori salvata come: " << output_path_cuda_color << endl;
+    //cout << "Immagine sequenziale a colori salvata come: " << output_path_seq_color << endl;
+    //cout << "Immagine CUDA a colori salvata come: " << output_path_cuda_color << endl;
 
     // Si ottiene sia immagini in grigio che immagini a colori equalizzate.
     // Così da quelle in grigio posso ottenere gli istogrammi da python per il report.

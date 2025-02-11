@@ -10,8 +10,10 @@ using namespace cv;
 
 // Kernel 1 per calcolare l'istogramma con memoria condivisa
 __global__ void computeHistogram(const uchar* input, int* hist, int width, int height) {
-    __shared__ int local_hist[256]; // Memoria condivisa:si usa memoria shared per accumulare un istogramma locale (migliora le performance, riducendo il traffico con la memoria globale)
-    int tid = threadIdx.x + threadIdx.y * blockDim.x; // Serve per indicizzare l'array dell'istogramma.
+    __shared__ int local_hist[256];  // Istogramma locale in memoria shared // Memoria condivisa:si usa memoria shared per accumulare un istogramma locale (migliora le performance, riducendo il traffico con la memoria globale)
+    __shared__ uchar tile[8][8];   // Memoria shared per un tile 8x8
+
+    int tid = threadIdx.x + threadIdx.y * blockDim.x; // Indice lineare del thread // Serve per indicizzare l'array dell'istogramma.
 
     // Inizializza l'istogramma locale
     if (tid < 256) {
@@ -19,18 +21,24 @@ __global__ void computeHistogram(const uchar* input, int* hist, int width, int h
     }
     __syncthreads();
 
-    // Calcola le coordinate globali
+    // Calcola le coordinate globali e locali
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-    // Aggiorna l'istogramma locale
+    // Carichiamo i pixel nella shared memory per il Tile (Utilizzo della memoria shared per i pixel dell'immagine (tile[32][32]))
     if (x < width && y < height) {
-        int pixel_value = input[y * width + x]; // Accesso coalescente
+        tile[threadIdx.y][threadIdx.x] = input[y * width + x];
+    }
+    __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
+
+    // Ogni thread aggiorna l'istogramma locale usando la memoria shared (Calcolo dell'istogramma direttamente sulla shared memory)
+    if (x < width && y < height) {
+        int pixel_value = tile[threadIdx.y][threadIdx.x];
         atomicAdd(&local_hist[pixel_value], 1);
     }
-    __syncthreads();
+    __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
 
-    // Unisci gli istogrammi locali in quello globale
+    // Uniamo i risultati dell'istogramma locale con la memoria globale (Scrittura ottimizzata della memoria globale)
     if (tid < 256) {
         atomicAdd(&hist[tid], local_hist[tid]);
     }
@@ -64,12 +72,20 @@ __global__ void computeCDF(int* hist, int* cdf) {
 
 // Kernel 3 per applicare la trasformazione
 __global__ void applyTransformation(uchar* output, const uchar* input, const uchar* lookup_table, int width, int height) {
+    __shared__ uchar tile[8][8]; // Memoria condivisa per un Tile 8x8
+
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
+    // Carichiamo un Tile nella shared memory
     if (x < width && y < height) {
-        int idx = y * width + x;
-        output[idx] = lookup_table[input[idx]]; // Accesso coalescente
+        tile[threadIdx.y][threadIdx.x] = input[y * width + x];
+    }
+    __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
+
+    // Applicazione della trasformazione
+    if (x < width && y < height) {
+        output[y * width + x] = lookup_table[tile[threadIdx.y][threadIdx.x]]; // Accesso Coalescente
     }
 }
 
@@ -77,6 +93,24 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     int width = input.cols; // Larghezza sarà quella della immagine che viene passata in input (colonne delle img)
     int height = input.rows; // Altezza sarà quella della immagine che viene passata in input (righe delle img)
     int total_pixels = width * height;
+
+    // Informazioni utili per il calcolo dell'Occupancy (Kernel 1 computeHistogram)
+    cudaFuncAttributes attr;
+    cudaFuncGetAttributes(&attr, (const void*)computeHistogram);
+    std::cout << "Registri per thread (kernel 1): " << attr.numRegs << std::endl;
+    std::cout << "Shared memory per blocco (kernel 1): " << attr.sharedSizeBytes << " bytes" << std::endl;
+
+    // Informazioni utili per il calcolo dell'Occupancy (Kernel 2 computeCDF)
+    cudaFuncAttributes attr2;
+    cudaFuncGetAttributes(&attr2, (const void*)computeCDF);
+    std::cout << "Registri per thread (kernel 2): " << attr2.numRegs << std::endl;
+    std::cout << "Shared memory per blocco (kernel 2): " << attr2.sharedSizeBytes << " bytes" << std::endl;
+
+    // Informazioni utili per il calcolo dell'Occupancy (Kernel 3 applyTransformation)
+    cudaFuncAttributes attr3;
+    cudaFuncGetAttributes(&attr3, (const void*)applyTransformation);
+    std::cout << "Registri per thread (kernel 3): " << attr3.numRegs << std::endl;
+    std::cout << "Shared memory per blocco (kernel 3): " << attr3.sharedSizeBytes << " bytes" << std::endl;
 
     // Alloca memoria sulla GPU (device) (NB: h = host, d = device)
     uchar* d_input;
@@ -111,7 +145,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     cudaEventCreate(&stop);
 
     // Parametri per i kernel
-    dim3 blockSize(32, 16); // Dimensione del blocco è data da 32x16 (512 threads) // Provando a cambiare con 32x32 non cambia molto
+    dim3 blockSize(16, 16); // Dimensione del blocco è data da 16x16 (256 threads) // Provando a cambiare con 32x32 non cambia molto
     dim3 gridSize((width + blockSize.x - 1) / blockSize.x,
                   (height + blockSize.y - 1) / blockSize.y);
 
@@ -120,11 +154,11 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
 
     // Kernel 1: Calcolo dell'istogramma
     computeHistogram<<<gridSize, blockSize>>>(d_input, d_hist, width, height);
-    //cudaDeviceSynchronize(); // Sincronizza prima di passare alla CDF --> rimossa perché non necessaria
+    //cudaDeviceSynchronize(); // Sincronizza prima di passare alla CDF --> rimossa perché non necessaria (rallenta esecuzione)
 
     // Kernel 2: Calcolo della CDF
     computeCDF<<<1, 256>>>(d_hist, d_cdf);
-    //cudaDeviceSynchronize(); // Sincronizza prima di passare alla applyTransformation --> rimossa perché non necessaria
+    //cudaDeviceSynchronize(); // Sincronizza prima di passare alla applyTransformation --> rimossa perché non necessaria (rallenta esecuzione)
 
     // Copia la CDF dalla GPU alla CPU (più veloce grazie alla Pinned Memory) [senza sincronizzazione]
     cudaMemcpyAsync(h_cdf, d_cdf, 256 * sizeof(int), cudaMemcpyDeviceToHost);
@@ -162,7 +196,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     float kernel_time;
     // Si prende il tempo passato tra i due eventi start e stop
     cudaEventElapsedTime(&kernel_time, start, stop); // Serve calcolare tempo totale esecuzione dei 3 kernel senza considerare copie di memoria (cudaMemcpy) --> prende il tmepo tra i due eventi (start e stop)
-    std::cout << "Tempo di esecuzione solo dei kernel CUDA: " << kernel_time << " ms" << std::endl;
+    std::cout << "--> Tempo di esecuzione solo dei kernel CUDA: " << kernel_time << " ms" << std::endl;
 
     // Copia il risultato sulla CPU (più veloce grazie alla Pinned Memory)
     cudaMemcpy(output.data, d_output, total_pixels * sizeof(uchar), cudaMemcpyDeviceToHost); // Questa operazione è quella che rallenta l'esecuzione

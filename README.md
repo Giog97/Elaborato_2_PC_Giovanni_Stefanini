@@ -23,8 +23,8 @@
 ---
 
 ## ⚙️ **Utilizzo**
-1. **Aggiungi immagini** nella directory `./img`. Alcune immagini di esempio di varie dimensioni sono già presenti all'interno del progetto
-2. **Esegui il programma**
+1. **Aggiungi immagini** nella directory `./img`. Alcune immagini di esempio di varie dimensioni sono già presenti all'interno del progetto.
+2. **Esegui il programma**.
 3. **Seleziona un'immagine** dalla lista visualizzata nel terminale (immagini presenti nella directory `./img`) e **scegli quale versione di Histogram Equalization** da usare.
 4. Guarda i risultati nella directory `./img_results` e controlla il tempo di esecuzione della versione scelta.
 
