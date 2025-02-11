@@ -11,7 +11,7 @@ using namespace cv;
 // Kernel 1 per calcolare l'istogramma con memoria condivisa
 __global__ void computeHistogram(const uchar* input, int* hist, int width, int height) {
     __shared__ int local_hist[256];  // Istogramma locale in memoria shared // Memoria condivisa:si usa memoria shared per accumulare un istogramma locale (migliora le performance, riducendo il traffico con la memoria globale)
-    __shared__ uchar tile[8][8];   // Memoria shared per un tile 8x8
+    __shared__ uchar tile[16][16];   // Memoria shared per un tile 16x16
 
     int tid = threadIdx.x + threadIdx.y * blockDim.x; // Indice lineare del thread // Serve per indicizzare l'array dell'istogramma.
 
@@ -72,7 +72,7 @@ __global__ void computeCDF(int* hist, int* cdf) {
 
 // Kernel 3 per applicare la trasformazione
 __global__ void applyTransformation(uchar* output, const uchar* input, const uchar* lookup_table, int width, int height) {
-    __shared__ uchar tile[8][8]; // Memoria condivisa per un Tile 8x8
+    __shared__ uchar tile[16][16]; // Memoria condivisa per un Tile 16x16
 
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
