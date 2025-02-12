@@ -10,14 +10,15 @@ using namespace cv;
 
 // Kernel 1 per calcolare l'istogramma con memoria condivisa
 __global__ void computeHistogram(const uchar* input, int* hist, int width, int height) {
-    __shared__ int local_hist[256];  // Istogramma locale in memoria shared // Memoria condivisa:si usa memoria shared per accumulare un istogramma locale (migliora le performance, riducendo il traffico con la memoria globale)
+    __shared__ int local_hist[256];  // Istogramma locale in memoria shared, per accumulare un istogramma locale (migliora le performance, riducendo il traffico con la memoria globale)
     __shared__ uchar tile[16][16];   // Memoria shared per un tile 16x16
+    //Ogni blocco di thread gestisce una porzione dell'immagine (un "tile" di 16x16 pixel)
 
-    int tid = threadIdx.x + threadIdx.y * blockDim.x; // Indice lineare del thread // Serve per indicizzare l'array dell'istogramma.
+    int tid = threadIdx.x + threadIdx.y * blockDim.x; // Indice lineare del thread --> Serve per indicizzare l'array dell'istogramma.
 
     // Inizializza l'istogramma locale
     if (tid < 256) {
-        local_hist[tid] = 0;
+        local_hist[tid] = 0; // Valori dell'istogramma locale vengono inizializzati a zero
     }
     __syncthreads();
 
@@ -25,16 +26,16 @@ __global__ void computeHistogram(const uchar* input, int* hist, int width, int h
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-    // Carichiamo i pixel nella shared memory per il Tile (Utilizzo della memoria shared per i pixel dell'immagine (tile[32][32]))
+    // Carichiamo i pixel nella shared memory per il Tile (Utilizzo della memoria shared per i pixel dell'immagine)
     if (x < width && y < height) {
-        tile[threadIdx.y][threadIdx.x] = input[y * width + x];
+        tile[threadIdx.y][threadIdx.x] = input[y * width + x]; // Ogni thread carica un pixel dalla memoria globale alla memoria condivisa
     }
     __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
 
     // Ogni thread aggiorna l'istogramma locale usando la memoria shared (Calcolo dell'istogramma direttamente sulla shared memory)
     if (x < width && y < height) {
         int pixel_value = tile[threadIdx.y][threadIdx.x];
-        atomicAdd(&local_hist[pixel_value], 1);
+        atomicAdd(&local_hist[pixel_value], 1); // Ogni thread aggiorna l'istogramma locale usando un'operazione atomica
     }
     __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
 
@@ -45,29 +46,30 @@ __global__ void computeHistogram(const uchar* input, int* hist, int width, int h
 }
 
 // Kernel 2 per calcolare la CDF
-// Si usa un Parallel Prefix Sum (Scan) per velocizzare il calcolo della CDF
+// Si usa un Parallel Reduce per velocizzare il calcolo della CDF
 __global__ void computeCDF(int* hist, int* cdf) {
     __shared__ int temp[256]; // Memoria condivisa
 
     int tid = threadIdx.x;
 
     // Carica l'istogramma nella memoria condivisa
-    temp[tid] = hist[tid];
-    __syncthreads();
+    temp[tid] = hist[tid]; // Valori istogramma caricati in un array condiviso (temp[256])
+    __syncthreads(); // Assicura che tutti i valori siano caricati prima di procedere oltre
 
-    // **Up-sweep (Riduzione)**
+    // Riduzione Parallela
     for (int offset = 1; offset < 256; offset *= 2) {
+        // Offset raddoppia perchè  così ho somma cumulativa in un numero logaritmico di passi
         int val = 0;
         if (tid >= offset) {
-            val = temp[tid - offset];
+            val = temp[tid - offset]; // Legge il valore precedente a distanza offset e lo somma al proprio valore
         }
         __syncthreads();
-        temp[tid] += val;
+        temp[tid] += val; // Somma risultante viene salvata come CDF
         __syncthreads();
     }
 
     // Scrivi il risultato finale
-    cdf[tid] = temp[tid];
+    cdf[tid] = temp[tid]; // CDF normalizzata viene scritta in memoria globale
 }
 
 // Kernel 3 per applicare la trasformazione
@@ -79,12 +81,13 @@ __global__ void applyTransformation(uchar* output, const uchar* input, const uch
 
     // Carichiamo un Tile nella shared memory
     if (x < width && y < height) {
-        tile[threadIdx.y][threadIdx.x] = input[y * width + x];
+        tile[threadIdx.y][threadIdx.x] = input[y * width + x]; // Dati immagine caricati in memoria shared per migliorare accesso
     }
     __syncthreads(); // All threads in the same block must reach the __syncthreads() before any of the them can move on
 
     // Applicazione della trasformazione
     if (x < width && y < height) {
+        // Ogni thread legge valore di un pixel e lo sostituisce con valore corrispondente nella lookup table
         output[y * width + x] = lookup_table[tile[threadIdx.y][threadIdx.x]]; // Accesso Coalescente
     }
 }
@@ -166,7 +169,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     // Aspetta che la CDF sia copiata sulla CPU prima di procedere con la lookup table
     cudaDeviceSynchronize(); // Questa sincronizzazione è necessaria per evitare che la lookup table venga calcolata prima che h_cdf sia pronto
 
-    // Calcolo della lookup table sulla CPU (Normalizzazione della CDF per ottenere i nuovi valori dei pixel?)
+    // Calcolo della lookup table sulla CPU (Normalizzazione della CDF per ottenere i nuovi valori dei pixel)
     int min_cdf = h_cdf[0];
     for (int i = 1; i < 256; i++) {
         if (h_cdf[i] < min_cdf) {

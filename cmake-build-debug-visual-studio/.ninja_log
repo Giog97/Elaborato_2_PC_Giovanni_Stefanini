@@ -29,3 +29,10 @@
 53	15973	7609903090699227	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_cuda.cu.obj	9629d2a49b97f42a
 15974	16509	7609903249904343	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
 16509	17234	7609903255264151	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
+39	1022	7610528044338910	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj.ddi	31c554184447eb5
+1023	1118	7610528054177773	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXX.dd	2297b1c4e4a4e4e1
+1023	1118	7610528054177773	C:/Users/giost/CLionProjects/Elaborato_2_Giovanni_Stefanini/cmake-build-debug-visual-studio/CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/CXXModules.json	2297b1c4e4a4e4e1
+1023	1118	7610528054177773	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj.modmap	2297b1c4e4a4e4e1
+1120	5240	7610528055137763	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/histogram_equalization_seq.cpp.obj	e379f26f2851f06
+5240	5917	7610528096343949	CMakeFiles/Elaborato_2_Giovanni_Stefanini.dir/cmake_device_link.obj	ed4fa052273836d0
+5917	6596	7610528103118039	Elaborato_2_Giovanni_Stefanini.exe	9b7e6053d9748639
