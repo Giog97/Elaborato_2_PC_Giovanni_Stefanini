@@ -108,6 +108,9 @@ int main() {
     printf("Registers per block: %d\n", prop.regsPerBlock);
     printf("Shared memory per block: %lu bytes\n", prop.sharedMemPerBlock);
     printf("Threads per SM: %d\n", prop.maxThreadsPerMultiProcessor);
+    //std::cout << "CUDA Compiler Version: " << __CUDACC_VER_MAJOR__ << "."
+    //          << __CUDACC_VER_MINOR__ << "." << __CUDACC_VER_BUILD__ << std::endl; // Restituisce la versione del compilatore nvcc usata
+    // std::cout << "Host Compiler: MSVC " << _MSC_VER << std::endl; // Compilatore usato da me è MSVC
 
     // Output
     Mat output_seq;

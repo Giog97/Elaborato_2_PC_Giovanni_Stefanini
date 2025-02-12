@@ -204,6 +204,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     // Copia il risultato sulla CPU (più veloce grazie alla Pinned Memory)
     cudaMemcpy(output.data, d_output, total_pixels * sizeof(uchar), cudaMemcpyDeviceToHost); // Questa operazione è quella che rallenta l'esecuzione
 
+    // Cleanup
     // Libera memoria GPU
     cudaFree(d_input);
     cudaFree(d_output);
