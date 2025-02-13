@@ -137,7 +137,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     cudaHostAlloc((void**)&h_lookup_table, 256 * sizeof(uchar), cudaHostAllocDefault);
 
     // Copia l'immagine input sulla GPU
-    cudaMemcpy(d_input, input.data, total_pixels * sizeof(uchar), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_input, input.data, total_pixels * sizeof(uchar), cudaMemcpyHostToDevice); // Operazione che rallenta l'esecuzione
 
     // Inizializza l'istogramma a zero
     cudaMemset(d_hist, 0, 256 * sizeof(int));
