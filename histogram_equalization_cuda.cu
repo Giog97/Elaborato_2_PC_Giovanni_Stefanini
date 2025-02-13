@@ -1,5 +1,5 @@
 //
-// Created by giost on 05/02/2025.
+// Created by gioste.
 //
 
 #include "histogram_equalization_cuda.h"
