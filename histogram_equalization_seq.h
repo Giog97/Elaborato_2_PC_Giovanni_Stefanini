@@ -1,5 +1,5 @@
 //
-// Created by giost on 10/02/2025.
+// Created by gioste.
 //
 
 #ifndef HISTOGRAM_EQUALIZATION_SEQ_H
