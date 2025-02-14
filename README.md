@@ -1,7 +1,7 @@
 # 🎨 **Histogram Equalization to improve Image Contrast**
-🚀 *Confronto tra implementazioni **sequenziale** e **parallela con CUDA***
+🚀 *Confronto tra implementazioni **sequenziale** e **parallela***
 
-> Questo progetto esplora l'**Histogram Equalization** per migliorare il contrasto di immagini, confrontando una versione **sequenziale** e una **parallela** ottimizzata con **OpenMP**.
+> Questo progetto esplora l'**Histogram Equalization** per migliorare il contrasto di immagini, confrontando una versione **sequenziale** e una **parallela** ottimizzata con **CUDA**.
 
 ---
 
@@ -25,10 +25,10 @@
 ## ⚙️ **Utilizzo**
 1. **Aggiungi immagini** nella directory `./img`. Alcune immagini di esempio di varie dimensioni sono già presenti all'interno del progetto.
 2. **Esegui il programma**.
-3. **Seleziona un'immagine** dalla lista visualizzata nel terminale (immagini presenti nella directory `./img`) e **scegli quale versione di Histogram Equalization** da usare.
-4. Guarda i risultati nella directory `./img_results` e controlla il tempo di esecuzione della versione scelta.
+3. **Seleziona un'immagine** dalla lista visualizzata nel terminale (immagini presenti nella directory `./img`).
+4. Guarda i risultati nella directory `./img_results` e controlla il tempo di esecuzione delle due versioni.
 
-💡 *Il programma mostrerà i tempi di esecuzione per l'implementazione scelta!*
+💡 *Il programma mostrerà i tempi di esecuzione per entrambe le implementazioni!*
 
 ---
 

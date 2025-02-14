@@ -74,7 +74,7 @@ __global__ void computeCDF(int* hist, int* cdf) {
 
 // Kernel 3 per applicare la trasformazione
 __global__ void applyTransformation(uchar* output, const uchar* input, const uchar* lookup_table, int width, int height) {
-    __shared__ uchar tile[16][16]; // Memoria condivisa per un Tile 16x16
+    __shared__ uchar tile[16][16]; // Memoria condivisa per un Tile 16x16 //se qui metto 8x8 l'immagine si sciupa
 
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
