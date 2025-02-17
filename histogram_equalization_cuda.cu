@@ -63,13 +63,13 @@ __global__ void computeCDF(int* hist, int* cdf) {
         if (tid >= offset) {
             val = temp[tid - offset]; // Legge il valore precedente a distanza offset e lo somma al proprio valore
         }
-        __syncthreads();
+        __syncthreads(); // Per evitare letture/scritture incoerenti
         temp[tid] += val; // Somma risultante viene salvata come CDF
-        __syncthreads();
+        __syncthreads(); // Per evitare letture/scritture incoerenti
     }
 
     // Scrivi il risultato finale
-    cdf[tid] = temp[tid]; // CDF normalizzata viene scritta in memoria globale
+    cdf[tid] = temp[tid]; // CDF calcolata viene scritta in memoria globale
 }
 
 // Kernel 3 per applicare la trasformazione
@@ -148,9 +148,9 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     cudaEventCreate(&stop);
 
     // Parametri per i kernel
-    dim3 blockSize(16, 16); // Dimensione del blocco è data da 16x16 (256 threads) // Provando a cambiare con 32x32 non cambia molto
+    dim3 blockSize(16, 16); // Dimensione del blocco è data da 16x16 (256 threads) // Provato a cambiare con 32x32 non cambia molto
     dim3 gridSize((width + blockSize.x - 1) / blockSize.x,
-                  (height + blockSize.y - 1) / blockSize.y);
+                  (height + blockSize.y - 1) / blockSize.y); // GridSize dipende dall'immagine
 
     // Inizia la misurazione del tempo solo per i kernel
     cudaEventRecord(start);
@@ -160,7 +160,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     //cudaDeviceSynchronize(); // Sincronizza prima di passare alla CDF --> rimossa perché non necessaria (rallenta esecuzione)
 
     // Kernel 2: Calcolo della CDF
-    computeCDF<<<1, 256>>>(d_hist, d_cdf);
+    computeCDF<<<1, 256>>>(d_hist, d_cdf); // In questo ho 256 thread che lavoreranno insieme all'interno dello stesso blocco
     //cudaDeviceSynchronize(); // Sincronizza prima di passare alla applyTransformation --> rimossa perché non necessaria (rallenta esecuzione)
 
     // Copia la CDF dalla GPU alla CPU (più veloce grazie alla Pinned Memory) [senza sincronizzazione]
@@ -201,7 +201,7 @@ void histogram_equalization_cuda(const Mat& input, Mat& output) {
     cudaEventElapsedTime(&kernel_time, start, stop); // Serve calcolare tempo totale esecuzione dei 3 kernel senza considerare copie di memoria (cudaMemcpy) --> prende il tmepo tra i due eventi (start e stop)
     std::cout << "--> Tempo di esecuzione solo dei kernel CUDA: " << kernel_time << " ms" << std::endl;
 
-    // Copia il risultato sulla CPU (più veloce grazie alla Pinned Memory)
+    // Copia il risultato sulla CPU
     cudaMemcpy(output.data, d_output, total_pixels * sizeof(uchar), cudaMemcpyDeviceToHost); // Questa operazione è quella che rallenta l'esecuzione
 
     // Cleanup
