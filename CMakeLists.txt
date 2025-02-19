@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 project(Elaborato_2_Giovanni_Stefanini LANGUAGES CXX CUDA)
 
-# Imposta il percorso di CUDA manualmente (se necessario)
+# Impostato il percorso di CUDA manualmente
 set(CUDA_TOOLKIT_ROOT_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8")
 
 # Abilita CUDA e C++

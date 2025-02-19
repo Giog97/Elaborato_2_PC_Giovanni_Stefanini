@@ -95,7 +95,7 @@ int main() {
 
     // Converti l'immagine in scala di grigi
     Mat input_gray;
-    cvtColor(input, input_gray, COLOR_BGR2GRAY);
+    cvtColor(input, input_gray, COLOR_BGR2GRAY); // Questo è indispensabile per versione CUDA, mentre per la sequenziale ha un controllo al suo interno
 
     // Informazioni utili per il calcolo dell'Occupancy
     cudaDeviceProp prop;
@@ -112,13 +112,13 @@ int main() {
     //          << __CUDACC_VER_MINOR__ << "." << __CUDACC_VER_BUILD__ << std::endl; // Restituisce la versione del compilatore nvcc usata
     // std::cout << "Host Compiler: MSVC " << _MSC_VER << std::endl; // Compilatore usato da me è MSVC
 
-    // Output
+    // Inizializza output sequenziale
     Mat output_seq;
 
     // Inizializza output_cuda con le stesse dimensioni e tipo di input_gray
     Mat output_cuda = Mat::zeros(input_gray.size(), input_gray.type());
 
-    // *** MISURAZIONE TEMPO DI ESECUZIONE SEQUENZIALE ***
+    // --- MISURAZIONE TEMPO DI ESECUZIONE SEQUENZIALE (uso std:chrono) ---
     auto start_seq = chrono::high_resolution_clock::now(); // Tempo iniziale
     histogram_equalization_seq(input_gray, output_seq);
     auto end_seq = chrono::high_resolution_clock::now(); // Tempo finale
@@ -126,7 +126,7 @@ int main() {
 
     cout << "--> Tempo di esecuzione dell'algoritmo sequenziale: " << elapsed_seq.count() << " ms" << endl;
 
-    // *** MISURAZIONE TEMPO DI ESECUZIONE CUDA ***
+    // --- MISURAZIONE TEMPO DI ESECUZIONE CUDA (uso std:chrono) ---
     auto start_cuda = chrono::high_resolution_clock::now(); // Tempo iniziale
     histogram_equalization_cuda(input_gray, output_cuda);
     auto end_cuda = chrono::high_resolution_clock::now(); // Tempo finale
@@ -134,7 +134,7 @@ int main() {
 
     cout << "--> Tempo di esecuzione CUDA (kernel + overhead di comunicazione tra CPU e GPU): " << elapsed_cuda.count() << " ms" << endl;
 
-    // Dopo l'equalizzazione (sequenziale o CUDA), ripristina le immagini a colori
+    // Dopo l'equalizzazione (sequenziale o CUDA), ripristina le immagini a colori (sennò sarebbero grige) per visualizzare bene il risultato
     Mat output_seq_color = restoreColorImage(input, output_seq);
     Mat output_cuda_color = restoreColorImage(input, output_cuda);
 
