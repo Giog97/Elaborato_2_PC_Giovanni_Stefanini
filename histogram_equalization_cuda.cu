@@ -51,17 +51,17 @@ __global__ void computeHistogram(const uchar* input, int* hist, int width, int h
 }
 
 // Kernel 2 per calcolare la CDF
-// Si usa un Parallel Reduce per velocizzare il calcolo della CDF
+// Si usa un Parallel Scan per velocizzare il calcolo della CDF
 __global__ void computeCDF(int* hist, int* cdf) {
     __shared__ int temp[256]; // Memoria condivisa
 
-    int tid = threadIdx.x; // Indice del thread all'interno del blocco, che va da 0 a 255. Indicizza memoria condivisa e determina quali thread eseguono le somme durante la riduzione parallela
+    int tid = threadIdx.x; // Indice del thread all'interno del blocco, che va da 0 a 255. Indicizza memoria condivisa e determina quali thread eseguono le somme durante lo scan parallelo
 
     // Carica l'istogramma nella memoria condivisa
     temp[tid] = hist[tid]; // Valori istogramma caricati in un array condiviso (temp[256])
     __syncthreads(); // Assicura che tutti i valori siano caricati prima di procedere oltre
 
-    // Riduzione Parallela
+    // Scan Parallelo
     for (int offset = 1; offset < 256; offset *= 2) {
         // Offset raddoppia perchè  così ho somma cumulativa in un numero logaritmico di passi
         int val = 0;
